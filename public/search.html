@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Fundraisers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background: #35424a;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        nav {
+            margin: 20px 0;
+            text-align: center;
+        }
+        nav a {
+            margin: 0 15px;
+            color: #35424a;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .search-form {
+            margin-bottom: 20px;
+        }
+        .search-form label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        .search-form input,
+        .search-form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .search-form button {
+            padding: 10px 15px;
+            border: none;
+            background: #35424a;
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .search-form button:hover {
+            background: #2c3e50;
+        }
+        .fundraiser-list {
+            margin-top: 20px;
+        }
+        .fundraiser-list div {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Search Fundraisers</h1>
+</header>
+
+<nav>
+    <a href="/">Home</a>
+    <a href="/search">Search Fundraisers</a>
+    <a href="/fundraisers">Fundraisers</a>
+    <a href="/donation.html">Make a Donation</a> <!-- Added Donation page link -->
+    
+</nav>
+
+<div class="container">
+    <form class="search-form" id="searchForm">
+        <label for="organizer">Organizer:</label>
+        <input type="text" id="organizer" name="organizer" placeholder="Enter organizer name">
+
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" placeholder="Enter city name">
+
+        <label for="category">Category:</label>
+        <select id="category" name="category">
+            <option value="">All Categories</option>
+            <option value="1">Health</option>
+            <option value="2">Education</option>
+            <option value="3">Environment</option>
+        </select>
+
+        <button type="submit">Search</button>
+        <button type="button" onclick="clearForm()">Clear</button>
+    </form>
+
+    <div class="fundraiser-list" id="fundraiserResults"></div>
+    <div class="error-message" id="errorMessage" style="display: none;"></div>
+</div>
+
+<script>
+    document.getElementById('searchForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const organizer = document.getElementById('organizer').value;
+        const city = document.getElementById('city').value;
+        const category = document.getElementById('category').value;
+
+        showLoadingIndicator();
+        fetch(`/search?organizer=${organizer}&city=${city}&category=${category}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                hideLoadingIndicator();
+                const resultsDiv = document.getElementById('fundraiserResults');
+                resultsDiv.innerHTML = '';
+                if (data.length > 0) {
+                    data.forEach(fundraiser => {
+                        resultsDiv.appendChild(createFundraiserCard(fundraiser));
+                    });
+                } else {
+                    resultsDiv.innerHTML = '<p>No fundraisers found.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching fundraisers:', error);
+                const errorMessageDiv = document.getElementById('errorMessage');
+                errorMessageDiv.textContent = 'An error occurred while fetching fundraisers.';
+                errorMessageDiv.style.display = 'block';
+            });
+    });
+
+    function createFundraiserCard(fundraiser) {
+        const fundraiserDiv = document.createElement('div');
+        fundraiserDiv.innerHTML = `
+            <h2>${fundraiser.caption}</h2>
+            <p>Organizer: ${fundraiser.organizer}</p>
+            <p>Current Funding: $${fundraiser.current_funding}</p>
+            <p>City: ${fundraiser.city}</p>
+            <a href="/fundraiser/${fundraiser.fundraiser_id}">View Details</a>
+        `;
+        return fundraiserDiv;
+    }
+
+    function clearForm() {
+        document.getElementById('searchForm').reset();
+        document.getElementById('fundraiserResults').innerHTML = '';
+        document.getElementById('errorMessage').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>

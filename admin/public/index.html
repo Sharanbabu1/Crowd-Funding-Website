@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    
+    <h2>Fundraisers</h2>
+    <div id="fundraiser-list"></div>
+    
+    <h2>Add New Fundraiser</h2>
+    <form id="add-fundraiser-form">
+        <label for="title">Title:</label>
+        <input type="text" id="title" required>
+        <label for="goal">Goal:</label>
+        <input type="number" id="goal" required>
+        <button type="submit">SAVE</button>
+    </form>
+
+    <h2>Update Fundraiser</h2>
+    <form id="update-fundraiser-form">
+        <label for="update-id">Fundraiser ID:</label>
+        <input type="number" id="update-id" required>
+        <label for="update-title">Title:</label>
+        <input type="text" id="update-title" required>
+        <label for="update-goal">Goal:</label>
+        <input type="number" id="update-goal" required>
+        <button type="submit">UPDATE</button>
+    </form>
+
+    <script src="script.js"></script>
+</body>
+</html>
