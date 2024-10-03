@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fundraiser Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background: #35424a;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .donation-list {
+            margin-top: 20px;
+        }
+        .donation-list div {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+        }
+        .donate-button {
+            padding: 10px 15px;
+            border: none;
+            background: #35424a;
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .donate-button:hover {
+            background: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Fundraiser Details</h1>
+</header>
+<nav>
+    <a href="/">Home</a>
+    <a href="/search">Search Fundraisers</a>
+    <a href="/fundraisers">Fundraisers</a> <!-- Added link for fundraisers -->
+    <a href="/donation.html">Make a Donation</a> <!-- Added Donation page link -->
+</nav>
+
+<div class="container">
+    <h2 id="fundraiserTitle"></h2>
+    <p id="fundraiserDescription"></p>
+    <p><strong>Current Funding:</strong> $<span id="currentFunding"></span></p>
+    <p><strong>Organizer:</strong> <span id="fundraiserOrganizer"></span></p>
+    <p><strong>City:</strong> <span id="fundraiserCity"></span></p>
+
+    <a href="/donation" class="donate-button">Donate</a>
+
+    <h3>Donations Received</h3>
+    <div class="donation-list" id="donationResults"></div>
+</div>
+
+<<script>
+    window.onload = function() {
+        const fundraiserId = getFundraiserIdFromURL();
+        console.log('Fundraiser ID from URL:', fundraiserId);
+        
+        if (fundraiserId) {
+            fetchFundraiserDetails(fundraiserId);
+            fetchDonations(fundraiserId);
+        } else {
+            console.error('No fundraiser ID found in the URL');
+        }
+    };
+
+    function fetchFundraiserDetails(fundraiserId) {
+        fetch(`/api/fundraiser/${fundraiserId}`)
+            .then(response => {
+                console.log('Response for fundraiser details:', response);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Fundraiser details:', data);
+                document.getElementById('fundraiserTitle').textContent = data.title;
+                document.getElementById('fundraiserDescription').textContent = data.description;
+                document.getElementById('currentFunding').textContent = data.raised;
+                document.getElementById('fundraiserOrganizer').textContent = data.organizer || 'N/A';
+                document.getElementById('fundraiserCity').textContent = data.city || 'N/A';
+            })
+            .catch(error => console.error('Error fetching fundraiser details:', error));
+    }
+
+    function fetchDonations(fundraiserId) {
+        fetch(`/api/fundraiser/${fundraiserId}/donations`)
+            .then(response => {
+                console.log('Response for donations:', response);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Donations data:', data);
+                const donationResults = document.getElementById('donationResults');
+                donationResults.innerHTML = '';
+                
+                if (data.length > 0) {
+                    data.forEach(donation => {
+                        const donationDiv = document.createElement('div');
+                        donationDiv.innerHTML = `
+                            <p><strong>Donor:</strong> ${donation.donor_name}</p>
+                            <p><strong>Amount:</strong> $${donation.amount}</p>
+                            <p><strong>Date:</strong> ${new Date(donation.date).toLocaleDateString()}</p>
+                        `;
+                        donationResults.appendChild(donationDiv);
+                    });
+                } else {
+                    donationResults.innerHTML = '<p>No donations received yet.</p>';
+                }
+            })
+            .catch(error => console.error('Error fetching donations:', error));
+    }
+
+    function getFundraiserIdFromURL() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('id');
+    }
+</script>
+</body>
+</html>

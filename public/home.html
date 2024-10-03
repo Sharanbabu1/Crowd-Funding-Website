@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fundraiser Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #003366; /* Dark Blue */
+            color: #FFFFFF; /* White */
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #007BFF; /* Light Blue */
+            padding: 10px 0;
+        }
+        nav a {
+            color: #FFFFFF; /* White */
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: #0056b3; /* Darker Blue */
+        }
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .fundraiser-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .fundraiser-item {
+            background-color: #f9f9f9; /* Light White */
+            border: 1px solid #ccc; /* Gray */
+            border-radius: 5px;
+            padding: 15px;
+            flex: 1 1 calc(33.333% - 40px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .fundraiser-item h3 {
+            margin: 0 0 10px;
+        }
+        .fundraiser-item p {
+            margin: 5px 0;
+        }
+        .footer {
+            background-color: #003366; /* Dark Blue */
+            color: #FFFFFF; /* White */
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Welcome to Our Fundraiser Platform.You can donate various ogranization from here. </h1>
+</header>
+
+<nav>
+    <a href="/">Home</a>
+    <a href="/search">Search Fundraisers</a>
+    <a href="/fundraisers">Fundraisers</a> <!-- Added link for fundraisers -->
+    <a href="/donation.html">Make a Donation</a> <!-- Added Donation page link -->
+</nav>
+
+<div class="container">
+    <section id="about">
+        <h2>About Us</h2>
+        <p>We are dedicated to supporting various causes through crowdfunding. Explore our active fundraisers and contribute to making a difference. Helping hands never tired.</p>
+    </section>
+
+    <section id="active-fundraisers">
+        <h2>Active Fundraisers</h2>
+        <div class="fundraiser-list" id="fundraiserList">
+            <!-- Active fundraisers will be displayed here dynamically -->
+        </div>
+    </section>
+</div>
+
+<footer class="footer">
+    <p>© 2024 Fundraiser Platform. All rights reserved.</p>
+</footer>
+
+<script>
+    // Fetch and display active fundraisers
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('/api/fundraisers/active') // Updated to correct endpoint
+            .then(response => response.json())
+            .then(data => {
+                const fundraiserList = document.getElementById('fundraiserList');
+                if (data.length > 0) {
+                    data.forEach(fundraiser => {
+                        if (fundraiser.ACTIVE === 1) { // Ensure the fundraiser is active
+                            const item = document.createElement('div');
+                            item.className = 'fundraiser-item';
+                            item.innerHTML = `
+                                <h3>${fundraiser.CAPTION}</h3>
+                                <p>Organizer: ${fundraiser.ORGANIZER}</p>
+                                <p>City: ${fundraiser.CITY}</p>
+                                <p>Target Funding: $${fundraiser.TARGET_FUNDING}</p>
+                                <p>Current Funding: $${fundraiser.CURRENT_FUNDING}</p>
+                            `;
+                            fundraiserList.appendChild(item);
+                        }
+                    });
+                } else {
+                    fundraiserList.innerHTML = '<p>No active fundraisers available.</p>';
+                }
+            })
+            .catch(error => console.error('Error fetching fundraisers:', error));
+    });
+</script>
+
+</body>
+</html>
