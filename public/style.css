@@ -1,77 +1,101 @@
-
+/* Global Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #F4F7FA; /* Soft light background */
+    color: #333;
     margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
 }
 
 header {
-    background-color: #333;
-    color: #fff;
-    padding: 10px 0;
-    text-align: center;
-}
-
-header h1 {
-    margin: 0;
-}
-
-nav ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-nav ul li {
-    display: inline;
-    margin: 0 10px;
-}
-
-nav ul li a {
-    color: #fff;
-    text-decoration: none;
-}
-
-main {
+    background-color: #4A90E2; /* Soft blue */
+    color: white;
     padding: 20px;
+    text-align: center;
+    border-bottom: 4px solid #50E3C2; /* Green accent */
 }
 
-#fundraisers-list {
-    margin-top: 20px;
+nav {
+    display: flex;
+    justify-content: center;
+    background-color: #50E3C2; /* Soft teal */
+    padding: 10px 0;
 }
 
-.fundraiser-item {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    padding: 15px;
-}
-
-.fundraiser-item h3 {
-    margin: 0 0 10px;
-}
-
-.view-details {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
+nav a {
+    color: #333; /* Dark text for contrast */
     text-decoration: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+nav a:hover {
+    background-color: #4A90E2; /* Blue on hover */
+    color: white; /* White text on hover */
+}
+
+/* Container Styles */
+.container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+    background: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Fundraiser Item Styles */
+.fundraiser-item {
+    background-color: #FFEB3B; /* Vibrant yellow */
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
 }
 
-.view-details:hover {
-    background-color: #0056b3;
+.fundraiser-item h3 {
+    margin-top: 0;
+    color: #E94E77; /* Warm pink */
 }
 
-footer {
-    background-color: #333;
-    color: #fff;
+.fundraiser-item p {
+    margin: 5px 0;
+}
+
+.fundraiser-item a {
+    text-decoration: none;
+    color: #4A90E2; /* Soft blue */
+    font-weight: bold;
+}
+
+.fundraiser-item a:hover {
+    text-decoration: underline;
+    color: #E94E77; /* Warm pink on hover */
+}
+
+/* Button Styles */
+.button {
+    padding: 10px 15px;
+    background-color: #E94E77; /* Warm pink for buttons */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #D81B60; /* Darker pink on hover */
+}
+
+/* Footer Styles */
+.footer {
+    background-color: #4A90E2; /* Soft blue */
+    color: white;
     text-align: center;
-    padding: 10px;
-    position: absolute;
+    padding: 10px 0;
+    position: relative;
     bottom: 0;
     width: 100%;
 }

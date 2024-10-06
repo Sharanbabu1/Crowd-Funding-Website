@@ -5,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fundraiser Platform</title>
+    <link rel="stylesheet" href="style.css">
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,26 +15,26 @@
             background-color: #f4f4f9;
         }
         header {
-            background-color: #003366; /* Dark Blue */
-            color: #FFFFFF; /* White */
+            background-color: #003366;
+            color: #FFFFFF;
             padding: 20px;
             text-align: center;
         }
         nav {
             display: flex;
             justify-content: center;
-            background-color: #007BFF; /* Light Blue */
+            background-color: #007BFF;
             padding: 10px 0;
         }
         nav a {
-            color: #FFFFFF; /* White */
+            color: #FFFFFF;
             text-decoration: none;
             padding: 10px 20px;
             margin: 0 5px;
             transition: background-color 0.3s;
         }
         nav a:hover {
-            background-color: #0056b3; /* Darker Blue */
+            background-color: #0056b3;
         }
         .container {
             padding: 20px;
@@ -45,8 +47,8 @@
             gap: 20px;
         }
         .fundraiser-item {
-            background-color: #f9f9f9; /* Light White */
-            border: 1px solid #ccc; /* Gray */
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
             border-radius: 5px;
             padding: 15px;
             flex: 1 1 calc(33.333% - 40px);
@@ -58,9 +60,17 @@
         .fundraiser-item p {
             margin: 5px 0;
         }
+        .fundraiser-item a {
+            text-decoration: none;
+            color: #007BFF;
+            font-weight: bold;
+        }
+        .fundraiser-item a:hover {
+            text-decoration: underline;
+        }
         .footer {
-            background-color: #003366; /* Dark Blue */
-            color: #FFFFFF; /* White */
+            background-color: #003366;
+            color: #FFFFFF;
             text-align: center;
             padding: 10px 0;
             position: fixed;
@@ -72,20 +82,20 @@
 <body>
 
 <header>
-    <h1>Welcome to Our Fundraiser Platform.You can donate various ogranization from here. </h1>
+    <h1>Welcome to Our Fundraiser Platform. You can donate to various organizations from here.</h1>
 </header>
 
 <nav>
     <a href="/">Home</a>
     <a href="/search">Search Fundraisers</a>
-    <a href="/fundraisers">Fundraisers</a> <!-- Added link for fundraisers -->
-    <a href="/donation.html">Make a Donation</a> <!-- Added Donation page link -->
+    <a href="/fundraisers">Fundraisers</a> <!-- Link for fundraisers -->
+    <a href="/donation.html">Make a Donation</a> <!-- Link to donation page -->
 </nav>
 
 <div class="container">
     <section id="about">
         <h2>About Us</h2>
-        <p>We are dedicated to supporting various causes through crowdfunding. Explore our active fundraisers and contribute to making a difference. Helping hands never tired.</p>
+        <p>We are dedicated to supporting various causes through crowdfunding. Explore our active fundraisers and contribute to making a difference. Helping hands never get tired.</p>
     </section>
 
     <section id="active-fundraisers">
@@ -101,9 +111,9 @@
 </footer>
 
 <script>
-    // Fetch and display active fundraisers
+    // Fetch and display active fundraisers with clickable links to their details
     document.addEventListener('DOMContentLoaded', () => {
-        fetch('/api/fundraisers/active') // Updated to correct endpoint
+        fetch('/api/fundraisers/active') // API endpoint to fetch active fundraisers
             .then(response => response.json())
             .then(data => {
                 const fundraiserList = document.getElementById('fundraiserList');
@@ -118,6 +128,7 @@
                                 <p>City: ${fundraiser.CITY}</p>
                                 <p>Target Funding: $${fundraiser.TARGET_FUNDING}</p>
                                 <p>Current Funding: $${fundraiser.CURRENT_FUNDING}</p>
+                                <a href="/fundraiser?id=${fundraiser.FUNDRAISER_ID}">View Details</a> <!-- Link to details -->
                             `;
                             fundraiserList.appendChild(item);
                         }

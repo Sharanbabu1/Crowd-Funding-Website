@@ -1,64 +1,44 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const fundraiserDetails = document.querySelector('#fundraiserDetails');
-    const donationList = document.querySelector('#donationList');
-    const donateButton = document.querySelector('#donateButton');
-    const params = new URLSearchParams(window.location.search);
-    const fundraiserId = params.get('id'); // Get fundraiser ID from query string
+// fundraiser.js
+const params = new URLSearchParams(window.location.search);
+const fundraiserId = params.get('id');
 
-    // Function to fetch fundraiser details and donations
-    function fetchFundraiser() {
-        if (fundraiserId) {
-            // Fetch fundraiser details from the API
-            fetch(`/api/fundraiser/${fundraiserId}`) // API endpoint
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch fundraiser details.');
-                    }
-                    return response.json();
-                })
-                .then(fundraiser => {
-                    fundraiserDetails.innerHTML = `
-                        <h3>${fundraiser.title}</h3>
-                        <p>Goal: $${fundraiser.goal} | Raised: $${fundraiser.raised}</p>
-                        <p>${fundraiser.description}</p>
-                    `;
-                    fetchDonations(); // Fetch donations after details
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    fundraiserDetails.innerHTML = 'Error loading fundraiser details. Please try again later.';
-                });
-        } else {
-            fundraiserDetails.innerHTML = 'No fundraiser ID provided.';
-        }
-    }
+window.onload = function() {
+    // Fetch fundraiser details
+    fetch(`/api/fundraiser/${fundraiserId}`)
+        .then(response => response.json())
+        .then(fundraiser => {
+            document.getElementById('fundraiserTitle').textContent = fundraiser.CAPTION;
+            document.getElementById('goal').textContent = fundraiser.TARGET_FUNDING;
+            document.getElementById('raised').textContent = fundraiser.CURRENT_FUNDING;
+            document.getElementById('city').textContent = fundraiser.CITY;
+            document.getElementById('organizer').textContent = fundraiser.ORGANIZER;
+        })
+        .catch(error => console.error('Error fetching fundraiser details:', error));
 
-    // Function to fetch donations for the fundraiser
-    function fetchDonations() {
-        fetch(`/api/donations/${fundraiserId}`) // API endpoint
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to fetch donations.');
-                }
-                return response.json();
-            })
-            .then(donations => {
-                donations.forEach(donation => {
-                    const li = document.createElement('li');
-                    li.textContent = `${donation.giver} donated $${donation.amount}`;
-                    donationList.appendChild(li);
-                });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                donationList.innerHTML = 'Error loading donations. Please try again later.';
+    // Fetch donations for the fundraiser
+    fetch(`/api/fundraiser/${fundraiserId}/donations`)
+        .then(response => response.json())
+        .then(donations => {
+            const donationResults = document.getElementById('donationResults');
+            if (donations.length === 0) {
+                donationResults.innerHTML = '<p>No donations yet.</p>';
+                return;
+            }
+
+            donations.forEach(donation => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <p><strong>Donor:</strong> ${donation.GIVER}</p>
+                    <p><strong>Amount:</strong> $${donation.AMOUNT}</p>
+                    <p><strong>Date:</strong> ${new Date(donation.DATE).toLocaleDateString()}</p>
+                `;
+                donationResults.appendChild(div);
             });
-    }
+        })
+        .catch(error => console.error('Error fetching donations:', error));
+};
 
-    // Update the donate button to redirect to the donation page
-    donateButton.addEventListener('click', function () {
-        window.location.href = `/donation?id=${fundraiserId}`; // Redirect to the donation page with the fundraiser ID
-    });
-
-    fetchFundraiser(); // Fetch fundraiser details on page load
+// Handle donation button click
+document.getElementById('donateButton').addEventListener('click', () => {
+    window.location.href = `/donation?id=${fundraiserId}`;
 });

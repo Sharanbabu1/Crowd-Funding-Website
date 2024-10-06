@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Fundraisers</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .fundraiser-item {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .fundraiser-item h3 {
+            margin-top: 0;
+        }
+        .fundraiser-item a {
+            text-decoration: none;
+            color: blue;
+            font-weight: bold;
+        }
+        .fundraiser-item a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<nav>
+    <a href="/">Home</a>
+    <a href="/search">Search Fundraisers</a>
+    <a href="/fundraisers">Fundraisers</a> <!-- Link for fundraisers -->
+    <a href="/donation.html">Make a Donation</a> <!-- Link to donation page -->
+</nav>
+<body>
+<h1>Active Fundraisers</h1>
+<div id="fundraiserList"></div>
+
+<footer class="footer">
+    <p>© 2024 Fundraiser Platform. All rights reserved.</p>
+</footer>
+
+<script src="/fundraisers.js"></script> <!-- Link to fundraisers.js file -->
+</body>
+
+</html>
